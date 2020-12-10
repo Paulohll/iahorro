@@ -24,4 +24,11 @@ class Registro extends Model
     {
         return $this->belongsTo('App\Models\Analista');
     }
+
+    public function score()
+    {
+        $interval=$this->created_at->diff(now());
+        
+        return ($this->monto_solicitado/$this->ingresos)*$interval->format('%H');
+    }
 }

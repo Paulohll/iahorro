@@ -25,7 +25,6 @@ class RegistroController extends Controller
     public function create()
     {
         //
-
     }
 
     /**
@@ -36,9 +35,12 @@ class RegistroController extends Controller
      */
     public function store(Request $request)
     {
-        $registro = Registro::create($request->all());
-
-        return response()->json($registro, 201);
+        try {
+            $registro = Registro::create($request->all());
+            return  ($registro) ?  response()->json($registro->load('analista'), 201) : response()->json('No se encontraron datos', 204) ;
+        } catch (\Throwable $th) {
+            return  response()->json('Algo salio mal', 400) ;
+        }
     }
 
     /**

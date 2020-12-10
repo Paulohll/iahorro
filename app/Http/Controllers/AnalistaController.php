@@ -83,7 +83,7 @@ class AnalistaController extends Controller
         //
     }
 
-       /**
+    /**
      * Genera agenda de registros segun franja de disponibilidad de clientes.
      *
      * @param  $id  $analista
@@ -91,6 +91,14 @@ class AnalistaController extends Controller
      */
     public function agenda(Request $request)
     {
-        $registros=Analista::find(1)->registros;
+        try {
+            $agenda=Analista::find($request->id)->registros->where('hora_inicial', '<', date('H:i:s'))->where('hora_final', '>', date('H:i:s'))->sortByDesc(function ($registro, $key) {
+                return $registro->score();
+            });
+
+            return  (!$agenda->isEmpty()) ?  response()->json($agenda, 201) : ('No se encontraron datos') ;
+        } catch (\Throwable $th) {
+            return  response()->json('Algo salio mal', 400) ;
+        }
     }
 }

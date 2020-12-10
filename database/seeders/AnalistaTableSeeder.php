@@ -4,6 +4,8 @@ namespace Database\Seeders;
 
 use App\Models\Analista;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
+
 
 class AnalistaTableSeeder extends Seeder
 {
@@ -14,11 +16,15 @@ class AnalistaTableSeeder extends Seeder
      */
     public function run()
     {
-        // Analista::truncate();
+        DB::statement('SET FOREIGN_KEY_CHECKS = 0');
+        Analista::truncate();
+        DB::statement('SET FOREIGN_KEY_CHECKS = 1');
+
+        //
 
         $faker = \Faker\Factory::create();
 
-        for ($i = 0; $i < 10; $i++) {
+        for ($i = 0; $i < 5; $i++) {
             Analista::create([
                 'nombre' => $faker->name,
             ]);
